@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Box, Typography, Button, } from '@mui/material'
 import { useGame } from '../../hooks'
 
-const winningCombinations = [
+const winniningPossibility = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
@@ -17,16 +17,16 @@ const winningCombinations = [
 export const GamePage = () => {
   const { setScoreHandle, scoreboard } = useGame()
   const [board, setBoard] = useState(Array(9).fill(null))
-  const [isXTurn, setIsXTurn] = useState(true)
+  const [playerX, setPlayerX] = useState(true)
   const [moveHistory, setMoveHistory] = useState([])
-  const winnerCombination = winningCombinations.find(
+  const winningItems = winniningPossibility.find(
     ([a, b, c]) =>
       board[a] &&
       board[a] === board[b] &&
       board[b] === board[c]
   )
-  const winner = winnerCombination
-    ? board[winnerCombination[0]]
+  const winner = winningItems
+    ? board[winningItems[0]]
     : null
 
   const isDraw = !winner && board.every(Boolean)
@@ -45,10 +45,10 @@ export const GamePage = () => {
     if (board[index] || gameOver) return
 
     const newBoard = [...board]
-    newBoard[index] = isXTurn ? 'X' : 'O'
+    newBoard[index] = playerX ? 'X' : 'O'
 
     setBoard(newBoard)
-    setIsXTurn(!isXTurn)
+    setPlayerX(!playerX)
     setMoveHistory((prev) => {
       return ([...prev, { move: prev.length + 1, player: newBoard[index], position: [Math.floor(index / 3) + 1, (index % 3) + 1] }])
     })
@@ -56,7 +56,7 @@ export const GamePage = () => {
 
   const handleReset = () => {
     setBoard(Array(9).fill(null))
-    setIsXTurn(true)
+    setPlayerX(true)
     setMoveHistory([])
   }
 
@@ -75,7 +75,7 @@ export const GamePage = () => {
           ? `🎉 Player ${winner} wins!`
           : isDraw
             ? "It's a draw!"
-            : `Player ${isXTurn ? 'X' : 'O'}'s turn`}
+            : `Player ${playerX ? 'X' : 'O'}'s turn`}
       </Typography>
 
       <Box sx={{ display: "flex" }}>
@@ -101,7 +101,7 @@ export const GamePage = () => {
                 const index = row * 3 + col
                 const cell = board[index]
                 const isWinningCell =
-                  winnerCombination?.includes(index)
+                  winningItems?.includes(index)
 
                 return (
                   <Box
