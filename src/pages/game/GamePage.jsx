@@ -57,11 +57,12 @@ export const GamePage = () => {
   const handleReset = () => {
     setBoard(Array(9).fill(null))
     setIsXTurn(true)
+    setMoveHistory([])
   }
 
   console.log(999999, { board, winner, scoreboard, moveHistory })
   return (
-    <Box className="game-container">
+    <Box >
       <Typography variant="h4" fontWeight="bold">
         Tic Tac Toe
       </Typography>
